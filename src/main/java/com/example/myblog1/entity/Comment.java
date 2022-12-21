@@ -14,7 +14,7 @@ public class Comment {
     @Column(nullable= false)
     private String content;
 
-
+   
     private User user;
     private Posts Posts;
 }
