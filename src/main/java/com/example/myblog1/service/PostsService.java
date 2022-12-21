@@ -2,7 +2,7 @@ package com.example.myblog1.service;
 
 import com.example.myblog1.dto.PostsRequest;
 import com.example.myblog1.dto.PostsResponse;
-import com.example.myblog1.dto.ResponseDelete;
+import com.example.myblog1.dto.ResponseStatusDto;
 import com.example.myblog1.entity.Posts;
 import com.example.myblog1.entity.User;
 import com.example.myblog1.jwt.JwtUtil;
@@ -99,7 +99,7 @@ public class PostsService {
     //    토큰을 검사한 후, 유효한 토큰이면서 해당 사용자가 작성한 게시글만 삭제 가능
     //선택한 게시글을 삭제하고 Client 로 성공했다는 메시지, 상태코드 반환하기
     @Transactional
-    public ResponseDelete deletePosts(Long id, HttpServletRequest request) {
+    public ResponseStatusDto deletePosts(Long id, HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
         Claims claims = null;
 
@@ -120,7 +120,7 @@ public class PostsService {
         );
 
         postsRepository.deleteById(id);
-        return new ResponseDelete(StatusEnum.DELETE_SUCCESS);
+        return new ResponseStatusDto(StatusEnum.DELETE_SUCCESS);
 
     }
 

@@ -2,10 +2,12 @@ package com.example.myblog1.service;
 
 
 import com.example.myblog1.dto.LoginRequest;
+import com.example.myblog1.dto.ResponseStatusDto;
 import com.example.myblog1.dto.SignupRequest;
 import com.example.myblog1.entity.User;
 import com.example.myblog1.entity.UserRoleEnum;
 import com.example.myblog1.jwt.JwtUtil;
+import com.example.myblog1.message.StatusEnum;
 import com.example.myblog1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,7 @@ public class UserService {
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     @Transactional
-    public void signup(SignupRequest signupRequest) {
+    public ResponseStatusDto signup(SignupRequest signupRequest) {
         String username = signupRequest.getUsername();
         String password = signupRequest.getPassword();
 
@@ -46,18 +48,15 @@ public class UserService {
             role = UserRoleEnum.ADMIN;
         }
 
-
         User user = new User(username, password, email, role);
-        System.out.println(username);
-        System.out.println(password);
-        System.out.println(email);
-        System.out.println(role);
+
         userRepository.save(user);
+        return new ResponseStatusDto(StatusEnum.SIGNUP_SUCCESS);
 
     }
 
     @Transactional // readOnly= true  하면 에러남
-    public void login(LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseStatusDto login(LoginRequest loginRequest, HttpServletResponse response) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 
@@ -71,6 +70,8 @@ public class UserService {
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getRole()));
         //response에 헤더쪽 값을 넣어수 있는데 키값에는 AUTHORIZATION_HEADER과 토큰 생성 값을 넣어줌
+
+        return new ResponseStatusDto(StatusEnum.LOGIN_SUCCESS);
     }
 
 }

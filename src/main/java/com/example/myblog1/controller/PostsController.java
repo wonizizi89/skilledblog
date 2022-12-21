@@ -3,9 +3,8 @@ package com.example.myblog1.controller;
 
 import com.example.myblog1.dto.PostsRequest;
 import com.example.myblog1.dto.PostsResponse;
-import com.example.myblog1.dto.ResponseDelete;
+import com.example.myblog1.dto.ResponseStatusDto;
 import com.example.myblog1.entity.Posts;
-import com.example.myblog1.message.StatusEnum;
 import com.example.myblog1.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +48,7 @@ public class PostsController {
 
     //선택한 포스트 삭제
     @DeleteMapping("/api/posts/{id}")
-    public ResponseDelete deletePosts(@PathVariable Long id, HttpServletRequest request ) {
+    public ResponseStatusDto deletePosts(@PathVariable Long id, HttpServletRequest request ) {
         return postsService.deletePosts(id,request);
     }
 }

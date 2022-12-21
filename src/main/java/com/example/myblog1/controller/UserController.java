@@ -2,6 +2,7 @@ package com.example.myblog1.controller;
 
 
 import com.example.myblog1.dto.LoginRequest;
+import com.example.myblog1.dto.ResponseStatusDto;
 import com.example.myblog1.dto.SignupRequest;
 import com.example.myblog1.entity.User;
 //import com.example.myblog1.message.Message;
@@ -31,16 +32,17 @@ public class UserController {
     //??? 포스트 맵핑이면 바디로 데이터가 들어오니 @requestBody 사용 하지 않나??
 
     @PostMapping("/signup")
-    public String signup(@RequestBody SignupRequest signupRequest) {
-        userService.signup(signupRequest);
-        return "성공했습니다. 상태코드 : 200";  //??????????????????????????다시해야함
+    public ResponseStatusDto signup(@RequestBody SignupRequest signupRequest) {
+        return userService.signup(signupRequest);
+
     }
 
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-        userService.login(loginRequest, response);
-        return "success";
+    public ResponseStatusDto login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        return userService.login(loginRequest, response);
+        //또는 return ResponseEntity.status(HttpStatus.OK).body(userService.login(loginRequestDto,response)); 간단히 표시가능
+
     }
 
 
