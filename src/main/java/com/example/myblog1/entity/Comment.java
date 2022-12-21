@@ -1,9 +1,6 @@
 package com.example.myblog1.entity;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 public class Comment {
 
@@ -14,7 +11,17 @@ public class Comment {
     @Column(nullable= false)
     private String content;
 
-   
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name= "user-id")
     private User user;
+
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name="user-id")
     private Posts Posts;
+
+    public Comment(String content, User user, com.example.myblog1.entity.Posts posts) {
+        this.content = content;
+        this.user = user;
+        Posts = posts;
+    }
 }
