@@ -1,0 +1,55 @@
+package com.example.myblog1.controller;
+
+
+import com.example.myblog1.dto.PostsRequest;
+import com.example.myblog1.dto.PostsResponse;
+import com.example.myblog1.dto.ResponseDelete;
+import com.example.myblog1.entity.Posts;
+import com.example.myblog1.message.StatusEnum;
+import com.example.myblog1.service.PostsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+
+@RestController
+@RequiredArgsConstructor
+public class PostsController {
+
+    private final PostsService postsService;
+
+    //포스트 글 생성
+    @PostMapping("/api/posts")
+    public PostsResponse createPosts(@RequestBody PostsRequest postsRequest, HttpServletRequest request) {
+        return postsService.createPosts(postsRequest, request);
+    }
+
+    //포스트 조회
+    @GetMapping("/api/posts")
+    public List<Posts> getPosts() {
+        return postsService.getPosts();
+
+    }
+
+    //해당 포스트 조회
+    @GetMapping("/api/posts/{id}")
+    public Posts getSelectPosts(@PathVariable Long id) {
+        return postsService.getSelectPosts(id);
+    }
+
+
+
+    // 선택한 포스트 수정 API
+    @PutMapping("/api/posts/{id}")
+    public Posts updatePosts(@PathVariable Long id, @RequestBody PostsRequest postsRequest, HttpServletRequest request) {
+        return postsService.updatePosts(id, postsRequest,request);
+    }
+
+    //선택한 포스트 삭제
+    @DeleteMapping("/api/posts/{id}")
+    public ResponseDelete deletePosts(@PathVariable Long id, HttpServletRequest request ) {
+        return postsService.deletePosts(id,request);
+    }
+}
