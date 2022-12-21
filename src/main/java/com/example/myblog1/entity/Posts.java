@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -24,11 +25,12 @@ public class Posts extends Timestamped {
     private String content;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "USER_ID",nullable = false)
     private User user;
 
-
+    @OneToMany
+    List<Comment> commentList = new ArrayList<>();
 
     public Posts(PostsRequest requestDto, User user) {
         this.title = requestDto.getTitle();
