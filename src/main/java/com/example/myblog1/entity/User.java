@@ -33,8 +33,8 @@ public class User{
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")//지연로딩
     List<Posts> postsList = new ArrayList<>();  //포스트와 일대다 관계
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    List<Comment>commentList = new ArrayList<>();
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+//    List<Comment>commentList = new ArrayList<>();
 
     public User(String username, String password, String email,UserRoleEnum role) {
         this.username = username;

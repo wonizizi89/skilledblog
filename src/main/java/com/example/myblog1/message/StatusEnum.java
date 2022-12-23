@@ -1,6 +1,5 @@
 package com.example.myblog1.message;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
