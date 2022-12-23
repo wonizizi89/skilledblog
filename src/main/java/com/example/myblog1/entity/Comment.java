@@ -1,27 +1,41 @@
 package com.example.myblog1.entity;
 
+import com.example.myblog1.dto.CommentRequest;
+import com.example.myblog1.dto.CommentResponse;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
-public class Comment {
+
+@Getter
+@Entity
+@NoArgsConstructor
+public class Comment extends Timestamped {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable= false)
+    @Column(nullable = false)
     private String content;
 
-   @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name= "user-id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-   @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name="user-id")
-    private Posts Posts;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "POSTS_ID", nullable = false)
+    private Posts posts;
 
-    public Comment(String content, User user, com.example.myblog1.entity.Posts posts) {
-        this.content = content;
+
+    public Comment(CommentRequest commentRequest, User user, Posts posts) {
+        this.content = commentRequest.getContent();
         this.user = user;
-        Posts = posts;
+        this.posts = posts;
+    }
+    public void updateComment(CommentRequest commentRequest) {
+        this.content = commentRequest.getContent();
     }
 }

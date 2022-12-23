@@ -15,13 +15,13 @@ public class PostsResponse {
     private String content;
 
     public PostsResponse(Posts posts) {
-        this.id = posts.getId() ;
+        this.id = posts.getId();
         this.title = posts.getTitle();
         this.username = posts.getUser().getUsername();
         this.content = posts.getContent();
 
     }
-    //    public PostsResponse(Long id, String title, String username, String content) {
+//        public PostsResponse(Long id, String title, String username, String content) {
 //        this.id = id;
 //        this.title = title;
 //        this.username = username;
@@ -29,8 +29,5 @@ public class PostsResponse {
 //
 //    }
 
-    public static PostsResponse of(Posts posts) {
-        return new PostsResponse(posts);
-    }
 
 }

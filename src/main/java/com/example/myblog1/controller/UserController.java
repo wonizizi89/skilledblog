@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public ResponseStatusDto signup(@RequestBody SignupRequest signupRequest) {
+    public ResponseStatusDto signup(@RequestBody @Valid SignupRequest signupRequest) {
         return userService.signup(signupRequest);
 
     }
@@ -40,7 +41,7 @@ public class UserController {
 
 
 
-//    //상태코드 구현 추후 구현 안 될시 지울 예정???????????????????
+    //상태코드 구현 추후 구현 안 될시 지울 예정???????????????????
 //    @GetMapping(value = "/{id}")
 //    public ResponseEntity<Message> findById(@PathVariable long id) {
 //        Optional<User> user = userRepository.findById(id);

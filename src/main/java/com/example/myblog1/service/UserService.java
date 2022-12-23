@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.Optional;
 
 
@@ -27,7 +28,7 @@ public class UserService {
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     @Transactional
-    public ResponseStatusDto signup(SignupRequest signupRequest) {
+    public ResponseStatusDto signup(@Valid SignupRequest signupRequest) {
         String username = signupRequest.getUsername();
         String password = signupRequest.getPassword();
 
@@ -68,7 +69,7 @@ public class UserService {
         if (!user.getPassword().equals(password)) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. ");
         }
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getRole()));
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getUserRole()));
         //response에 헤더쪽 값을 넣어수 있는데 키값에는 AUTHORIZATION_HEADER과 토큰 생성 값을 넣어줌
 
         return new ResponseStatusDto(StatusEnum.LOGIN_SUCCESS);
