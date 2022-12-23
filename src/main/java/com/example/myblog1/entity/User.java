@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -28,18 +29,35 @@ public class User{
 
     @Column(nullable= false)
     @Enumerated(value=EnumType.STRING)
-    private UserRoleEnum role;
+    private UserRoleEnum userRole;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")//지연로딩
     List<Posts> postsList = new ArrayList<>();  //포스트와 일대다 관계
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-//    List<Comment>commentList = new ArrayList<>();
 
-    public User(String username, String password, String email,UserRoleEnum role) {
+    //회원과 폴더의 관계
+    @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
+    private List<Comment> commentList = new ArrayList<>();
+
+    public User(String username, String password, String email,UserRoleEnum userRole) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.role = role;
+        this.userRole= userRole;
     }
+
+    public boolean isAdmin() {
+        return this.userRole == UserRoleEnum.ADMIN;
+    }
+
+
+
+    public boolean hasComment(Comment comment) {
+        return this.commentList.stream().anyMatch(x ->x.equals(comment));
+    }
+
+//    public boolean hasPost(Post post) {
+//        return this.posts.stream().anyMatch(x -> x.equals(post));
+//    }
+
 }
