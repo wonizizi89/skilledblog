@@ -26,10 +26,9 @@ public class PostsService {
     private final JwtUtil jwtUtil;
 
 
-
     @Transactional
     public PostsResponse createPosts(PostsRequest postsRequest, HttpServletRequest request) {
-        Posts posts;
+
         //Request 에서 token 가져오기
         String token = jwtUtil.resolveToken(request);
         Claims claims;
@@ -46,10 +45,10 @@ public class PostsService {
             );
 
             //요청받은 dto로 db에 저장할 객체 만들기
-            posts = postsRepository.saveAndFlush(new Posts(postsRequest, user));
+            Posts posts = postsRepository.saveAndFlush(new Posts(postsRequest, user));
 
             return new PostsResponse(posts);
-        }else{
+        } else {
             return null;
         }
 
@@ -68,34 +67,43 @@ public class PostsService {
         return posts;
     }
 
-    //토큰을 검사한 후, 유효한 토큰이면서 해당 사용자가 작성한 게시글만 수정 가능
+    //    토큰을 검사한 후, 유효한 토큰이면서 해당 사용자가 작성한 게시글만 수정 가능
 // 제목, 작성 내용을 수정하고 수정된 게시글을 Client 로 반환하기
-//    @Transactional
-//    public Posts updatePosts(Long id, PostsRequest postsRequest, HttpServletRequest request) {
-//        String token = jwtUtil.resolveToken(request);
-//        Claims claims;
-//
-//        if (token != null) {
-//            if (jwtUtil.validateToken(token)) {
-//                claims = jwtUtil.getUserInfoFromToken(token);
-//            } else {
-//                throw new IllegalArgumentException("Token Error");
-//            }
-//            //토큰에서 가져온 사용자 정보를 사용하여 DB 조회
-//            User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-//                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-//            );
-//
-//            Posts posts = postsRepository.findById(id).orElseThrow(
-//                    () -> new IllegalArgumentException("해당 게시글이 존재 하지 않습니다.")
-//            );
-//            posts.updatePosts(postsRequest);
-//            this.posts = posts;
-//
-//        }
-//        return posts;
-//    }
+    @Transactional
+    public PostsResponse updatePosts(Long id, PostsRequest postsRequest, HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
 
+        if (token != null) {
+            if (jwtUtil.validateToken(token)) {
+                claims = jwtUtil.getUserInfoFromToken(token);
+            } else {
+                throw new IllegalArgumentException("Token Error");
+            }
+            //토큰에서 가져온 사용자 정보를 사용하여 DB 조회
+            User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+            );
+
+            Posts posts = postsRepository.findById(id).orElseThrow(
+                    () -> new IllegalArgumentException("해당 게시글이 존재 하지 않습니다.")
+            );
+             posts.updatePosts(postsRequest);
+             postsRepository.saveAndFlush(posts);
+            return new PostsResponse(posts);
+
+        } else {
+            return null;
+        }
+
+    }
+
+//
+//        validateAuthorization(user, post);
+//        post.update(updatePostDto);
+//        postRepository.saveAndFlush(post);
+//        return ResponsePostDto.of(post);
+//    }
 
     //토큰을 검사한 후, 유효한 토큰이면서 해당 사용자가 작성한 게시글만 삭제 가능
     //선택한 게시글을 삭제하고 Client 로 성공했다는 메시지, 상태코드 반환하기

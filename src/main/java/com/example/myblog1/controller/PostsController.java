@@ -42,11 +42,11 @@ public class PostsController {
 
 
 
-    // 선택한 포스트 수정 API
-//    @PutMapping("/{id}")
-//    public Posts updatePosts(@PathVariable Long id, @RequestBody PostsRequest postsRequest, HttpServletRequest request) {
-//        return postsService.updatePosts(id, postsRequest,request);
-//    }
+  //선택한 포스트 수정 API
+    @PutMapping("/{id}")
+    public PostsResponse updatePosts(@PathVariable Long id, @RequestBody PostsRequest postsRequest, HttpServletRequest request) {
+        return postsService.updatePosts(id, postsRequest,request);
+    }
 
     //선택한 포스트 삭제
     @DeleteMapping("/{id}")
