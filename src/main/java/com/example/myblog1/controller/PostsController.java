@@ -23,7 +23,8 @@ public class PostsController {
     //포스트 글 생성
     @PostMapping("")
     public PostsResponse createPosts(@RequestBody PostsRequest postsRequest, HttpServletRequest request) {
-        return postsService.createPosts(postsRequest, request);
+        PostsResponse response =postsService.createPosts(postsRequest, request);
+        return response;
     }
 
     //포스트 조회
@@ -42,10 +43,10 @@ public class PostsController {
 
 
     // 선택한 포스트 수정 API
-    @PutMapping("/{id}")
-    public Posts updatePosts(@PathVariable Long id, @RequestBody PostsRequest postsRequest, HttpServletRequest request) {
-        return postsService.updatePosts(id, postsRequest,request);
-    }
+//    @PutMapping("/{id}")
+//    public Posts updatePosts(@PathVariable Long id, @RequestBody PostsRequest postsRequest, HttpServletRequest request) {
+//        return postsService.updatePosts(id, postsRequest,request);
+//    }
 
     //선택한 포스트 삭제
     @DeleteMapping("/{id}")
