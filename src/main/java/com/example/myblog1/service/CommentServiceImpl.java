@@ -7,12 +7,11 @@ import com.example.myblog1.entity.Comment;
 import com.example.myblog1.entity.Posts;
 import com.example.myblog1.entity.User;
 import com.example.myblog1.jwt.JwtUtil;
-import com.example.myblog1.message.StatusEnum;
+import com.example.myblog1.entity.StatusEnum;
 import com.example.myblog1.repository.CommentRepository;
 import com.example.myblog1.repository.PostsRepository;
 import com.example.myblog1.repository.UserRepository;
 import io.jsonwebtoken.Claims;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

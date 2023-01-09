@@ -15,25 +15,26 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/posts")
 public class PostsController {
 
     private final PostsService postsService;
 
     //포스트 글 생성
-    @PostMapping("/api/posts")
+    @PostMapping("")
     public PostsResponse createPosts(@RequestBody PostsRequest postsRequest, HttpServletRequest request) {
         return postsService.createPosts(postsRequest, request);
     }
 
     //포스트 조회
-    @GetMapping("/api/posts")
+    @GetMapping("")
     public List<Posts> getPosts() {
         return postsService.getPosts();
 
     }
 
     //해당 포스트 조회
-    @GetMapping("/api/posts/{id}")
+    @GetMapping("/{id}")
     public Posts getSelectPosts(@PathVariable Long id) {
         return postsService.getSelectPosts(id);
     }
@@ -41,13 +42,13 @@ public class PostsController {
 
 
     // 선택한 포스트 수정 API
-    @PutMapping("/api/posts/{id}")
+    @PutMapping("/{id}")
     public Posts updatePosts(@PathVariable Long id, @RequestBody PostsRequest postsRequest, HttpServletRequest request) {
         return postsService.updatePosts(id, postsRequest,request);
     }
 
     //선택한 포스트 삭제
-    @DeleteMapping("/api/posts/{id}")
+    @DeleteMapping("/{id}")
     public ResponseStatusDto deletePosts(@PathVariable Long id, HttpServletRequest request ) {
         return postsService.deletePosts(id,request);
     }

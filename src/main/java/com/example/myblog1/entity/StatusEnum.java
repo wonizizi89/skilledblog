@@ -1,4 +1,4 @@
-package com.example.myblog1.message;
+package com.example.myblog1.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
 package com.example.myblog1.dto;
 
-import com.example.myblog1.message.StatusEnum;
+import com.example.myblog1.entity.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -39,24 +39,5 @@ public class UserController {
 
     }
 
-
-
-    //상태코드 구현 추후 구현 안 될시 지울 예정???????????????????
-//    @GetMapping(value = "/{id}")
-//    public ResponseEntity<Message> findById(@PathVariable long id) {
-//        Optional<User> user = userRepository.findById(id);
-//        Message message = new Message();
-//        HttpHeaders headers = new HttpHeaders();
-//        Charset utf8 = Charset.forName("UTF-8");
-//        MediaType mediaType = new MediaType("application", "json", utf8);
-//        headers.setContentType(mediaType);
-//
-//        message.setStatus(StatusEnum.OK);
-//        message.setMessage("회원가입 성공");
-//        message.setData(user);
-//
-//        return ResponseEntity;
-//    }
-
 }
 

@@ -7,7 +7,7 @@ import com.example.myblog1.dto.SignupRequest;
 import com.example.myblog1.entity.User;
 import com.example.myblog1.entity.UserRoleEnum;
 import com.example.myblog1.jwt.JwtUtil;
-import com.example.myblog1.message.StatusEnum;
+import com.example.myblog1.entity.StatusEnum;
 import com.example.myblog1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

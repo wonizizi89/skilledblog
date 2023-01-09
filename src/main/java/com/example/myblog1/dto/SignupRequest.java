@@ -3,6 +3,7 @@ package com.example.myblog1.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -22,7 +23,8 @@ public class SignupRequest {
     @Pattern(regexp = "^[A-Za-z0-9]*$", message =" A-Z,a-z , 0-9 만 입력하세요.")
     private String password;
 
-
+    @Email
+    @NotBlank
     private String email;
     private boolean admin = false;
     private String adminToken="";
