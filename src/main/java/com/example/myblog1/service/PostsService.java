@@ -64,11 +64,11 @@ public class PostsService {
     }
 
     @Transactional
-    public Posts getSelectPosts(Long id) {
+    public PostsResponse getSelectPosts(Long id) {
         Posts posts = postsRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
-        return posts;
+        return PostsResponse.of(posts);
     }
 
     //    토큰을 검사한 후, 유효한 토큰이면서 해당 사용자가 작성한 게시글만 수정 가능

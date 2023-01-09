@@ -39,7 +39,7 @@ public class PostsController {
 
     //해당 포스트 조회
     @GetMapping("/{id}")
-    public Posts getPosts(@PathVariable Long id) {
+    public PostsResponse getSelectPosts(@PathVariable Long id) {
         return postsService.getSelectPosts(id);
     }
 
