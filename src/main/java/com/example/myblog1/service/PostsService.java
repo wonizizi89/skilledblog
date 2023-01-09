@@ -53,10 +53,14 @@ public class PostsService {
         }
 
     }
-
+// @Override
+//    @Transactional(readOnly = true)
+//    public List<ResponsePostDto> getPostList() {
+//        return ResponsePostDto.of(postRepository.findAllByOrderByCreatedAtDesc());
+//    }
     @Transactional
-    public List<Posts> getPosts() {
-        return postsRepository.findAllByOrderByModifiedAtDesc();
+    public List<PostsResponse> getPosts() {
+        return PostsResponse.of( postsRepository.findAllByOrderByModifiedAtDesc());
     }
 
     @Transactional

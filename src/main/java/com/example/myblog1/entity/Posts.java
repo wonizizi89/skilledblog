@@ -1,12 +1,14 @@
 package com.example.myblog1.entity;
 
 import com.example.myblog1.dto.PostsRequest;
+import com.example.myblog1.dto.PostsResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -39,11 +41,11 @@ public class Posts extends Timestamped {
 
     }
 
-
-
     public void updatePosts(PostsRequest requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
 
     }
+
+
 }
