@@ -17,6 +17,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/user")
 public class UserController {
 
+    //todo 회원탈퇴 구현
     private final UserService userService;
 
 
