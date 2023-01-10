@@ -1,4 +1,4 @@
-package com.example.myblog1.common.security.dto;
+package com.example.myblog1.common.security;
 
 
 import lombok.Getter;

@@ -57,8 +57,9 @@ public class User{
         return this.commentList.stream().anyMatch(x ->x.equals(comment));
     }
 
-//    public boolean hasPost(Post post) {
-//        return this.posts.stream().anyMatch(x -> x.equals(post));
-//    }
 
+
+    public UserRoleEnum getRole() {
+        return userRole;
+    }
 }
