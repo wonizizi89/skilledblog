@@ -36,7 +36,7 @@ public class UserService {
         //회원중복확인
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 username 입니다.");//statuCode:400 에러메시지와 같이 반환
+            throw new IllegalArgumentException("중복된 username 입니다.");
         }
 
         String email = signupRequest.getEmail();
@@ -67,7 +67,7 @@ public class UserService {
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
         );
         //비밀번호 확인
-        if (!user.getPassword().equals(password)) {
+        if (!passwordEncoder.matches(password,user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. ");
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getUserRole()));
