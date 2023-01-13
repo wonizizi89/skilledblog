@@ -53,11 +53,7 @@ public class PostsService {
         }
 
     }
-// @Override
-//    @Transactional(readOnly = true)
-//    public List<ResponsePostDto> getPostList() {
-//        return ResponsePostDto.of(postRepository.findAllByOrderByCreatedAtDesc());
-//    }
+
     @Transactional
     public List<PostsResponse> getPosts() {
         return PostsResponse.of( postsRepository.findAllByOrderByModifiedAtDesc());
@@ -102,15 +98,7 @@ public class PostsService {
 
     }
 
-//
-//        validateAuthorization(user, post);
-//        post.update(updatePostDto);
-//        postRepository.saveAndFlush(post);
-//        return ResponsePostDto.of(post);
-//    }
 
-    //토큰을 검사한 후, 유효한 토큰이면서 해당 사용자가 작성한 게시글만 삭제 가능
-    //선택한 게시글을 삭제하고 Client 로 성공했다는 메시지, 상태코드 반환하기
     @Transactional
     public ResponseStatusDto deletePosts(Long id, HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
@@ -134,7 +122,7 @@ public class PostsService {
 
             postsRepository.deleteById(id);
         }
-        return new ResponseStatusDto(StatusEnum.DELETE_SUCCESS);
+        return new ResponseStatusDto(StatusEnum.POSTS_DELETE_SUCCESS);
     }
 
 }

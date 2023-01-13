@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 public class CommentResponse {
     private Long id;
     private String username;
-    private String content;
+    private String comment;
 
     public CommentResponse(Comment comment) {
         this.id =comment.getId();
         this.username = comment.getUser().getUsername();
-        this.content = comment.getContent();
+        this.comment = comment.getComment();
     }
 
 

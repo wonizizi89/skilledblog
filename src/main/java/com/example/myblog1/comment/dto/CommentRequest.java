@@ -9,5 +9,4 @@ public class CommentRequest {
     @NotNull
     private String comment;
 
-
 }

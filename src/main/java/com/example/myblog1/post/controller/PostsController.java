@@ -25,7 +25,10 @@ public class PostsController {
         PostsResponse response =postsService.createPosts(postsRequest, request);
         return response;
     }
-
+//    @GetMapping("/posts")
+//    public List<ResponsePostDto> getPosts() {
+//        return postService.getPostList();
+//    }
     //포스트 조회
     @GetMapping("")
     public List<PostsResponse> getPosts() {

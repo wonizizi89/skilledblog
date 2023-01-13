@@ -7,7 +7,7 @@ import com.example.myblog1.user.dto.ResponseStatusDto;
 import javax.servlet.http.HttpServletRequest;
 
 public interface CommentService {
-    public CommentResponse createComment(Long postId,CommentRequest commentRequest, HttpServletRequest request) ;
-    public CommentResponse editComment(Long commentId, CommentRequest commentRequest, HttpServletRequest request);
-    public ResponseStatusDto deleteComment(Long commentId, HttpServletRequest request);
+    public void createComment(Long id,CommentRequest commentRequest, HttpServletRequest request) ;
+    public void editComment(Long id, CommentRequest commentRequest, HttpServletRequest request);
+    public void deleteComment(Long id, HttpServletRequest request);
 }
