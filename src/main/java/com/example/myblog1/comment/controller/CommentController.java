@@ -13,18 +13,18 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/comments")
 public class CommentController {
 
     private final CommentServiceImpl commentServiceImpl;
 
-    @PostMapping("/comment/{postsId}")
+    @PostMapping("/posts/{id}")
     public CommentResponse createComment(@RequestParam Long postsId,
                                          @RequestBody @Valid CommentRequest commentRequest,
                                          HttpServletRequest request){
         return commentServiceImpl.createComment(postsId,commentRequest,request);
     }
-    @PutMapping("/comment/{commentId}")
+    @PutMapping("/{id}")
     public CommentResponse editComment(@RequestParam Long commentId,
                                        @RequestBody CommentRequest commentrequest,
                                        HttpServletRequest request){
