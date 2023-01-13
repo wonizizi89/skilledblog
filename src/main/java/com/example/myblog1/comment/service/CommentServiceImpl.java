@@ -30,23 +30,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void createComment(Long postsId, CommentRequest commentRequest, HttpServletRequest request) {
-        String token = jwtUtil.resolveToken(request);
-        Claims claims = null;
-        if (token != null) {
-            if (jwtUtil.validateToken(token)) {
-                claims = jwtUtil.getUserInfoFromToken(token);
-            } else {
-                throw new IllegalArgumentException("Token error");
-            }
-        }
-        User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-        );
-
-        //선택한 글이 DB 저장 유뮤 확인
-        Posts posts = postsRepository.findById(postsId).orElseThrow(
-                () -> new IllegalArgumentException(("해당 글이 존재하지 않습니다."))
+    public void createComment(Long postsId, CommentRequest commentRequest, User user) {
+        Posts posts = postsRepository.findByIdAndUserId(postsId,user.getId()).orElseThrow(
+                () -> new NullPointerException(("해당 글이 존재하지 않습니다."))
         );
 
         //선택한 게시글이 있다면 댓글로 등록하고 등록된 댓글 반환
@@ -56,52 +42,24 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void editComment(Long id, CommentRequest commentRequest, HttpServletRequest request) {
-        String token = jwtUtil.resolveToken(request);
-        Claims claims = null;
-        if (token != null) {
-            if (jwtUtil.validateToken(token)) {
-                claims = jwtUtil.getUserInfoFromToken(token);
-            } else {
-                throw new IllegalArgumentException("Token error!");
-            }
-        }
-        Comment comment = commentRepository.findById(id).orElseThrow(
+    public void editComment(Long id, CommentRequest commentRequest, User user) {
+
+        Comment comment = commentRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 댓글이 없습니다.")
         );
-        User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재하지 입니다. ")
-        );
-
         comment.updateComment(commentRequest);
         commentRepository.saveAndFlush(comment);
-
 
     }
 
 
     @Override
     @Transactional
-    public void deleteComment(Long id, HttpServletRequest request) {
-        String token = jwtUtil.resolveToken(request);
-        Claims claims = null;
-        if (token != null) {
-            if (jwtUtil.validateToken(token)) {
-                claims = jwtUtil.getUserInfoFromToken(token);
-            } else {
-                throw new IllegalArgumentException("Token error!");
-            }
-        }
-        User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재하지 입니다. ")
-        );
-        Comment comment = commentRepository.findById(id).orElseThrow(
+    public void deleteComment(Long id, User user) {
+
+        Comment comment = commentRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 댓글이 없습니다.")
         );
-
-//- 선택한 댓글의 DB 저장 유무를 확인하기
-//- 선택한 댓글이 있다면 댓글 삭제하고 Client 로 성공했다는 메시지, 상태코드 반환하기
-
         validateComment(comment, user);
         commentRepository.deleteById(id);
 
