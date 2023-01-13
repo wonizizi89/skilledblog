@@ -29,14 +29,14 @@ public class PostsService {
 
     @Transactional
     public PostsResponse createPosts(PostsRequest postsRequest, User user) {
-            Posts posts = postsRepository.saveAndFlush(new Posts(postsRequest, user));
-            return new PostsResponse(posts);
-        }
+        Posts posts = postsRepository.saveAndFlush(new Posts(postsRequest, user));
+        return new PostsResponse(posts);
+    }
 
 
     @Transactional
     public List<PostsResponse> getPosts() {
-        return PostsResponse.of( postsRepository.findAllByOrderByModifiedAtDesc());
+        return PostsResponse.of(postsRepository.findAllByOrderByModifiedAtDesc());
     }
 
     @Transactional
@@ -47,60 +47,26 @@ public class PostsService {
         return PostsResponse.of(posts);
     }
 
-
     @Transactional
-    public PostsResponse updatePosts(Long id, PostsRequest postsRequest, HttpServletRequest request) {
-        String token = jwtUtil.resolveToken(request);
-        Claims claims;
+    public PostsResponse updatePosts(Long id, PostsRequest postsRequest, User user) {
+        Posts posts = postsRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
+                () -> new NullPointerException("해당 게시글이 존재 하지 않습니다.")
+        );
+        posts.updatePosts(postsRequest);
+        postsRepository.saveAndFlush(posts);
 
-        if (token != null) {
-            if (jwtUtil.validateToken(token)) {
-                claims = jwtUtil.getUserInfoFromToken(token);
-            } else {
-                throw new IllegalArgumentException("Token Error");
-            }
-            //토큰에서 가져온 사용자 정보를 사용하여 DB 조회
-            User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-            );
-
-            Posts posts = postsRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException("해당 게시글이 존재 하지 않습니다.")
-            );
-             posts.updatePosts(postsRequest);
-             postsRepository.saveAndFlush(posts);
-            return new PostsResponse(posts);
-
-        } else {
-            return null;
-        }
+        return new PostsResponse(posts);
 
     }
 
 
     @Transactional
-    public ResponseStatusDto deletePosts(Long id, HttpServletRequest request) {
-        String token = jwtUtil.resolveToken(request);
-        Claims claims;
+    public ResponseStatusDto deletePosts(Long id, User user) {
+        Posts posts = postsRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
+                () -> new NullPointerException("해당 게시글이 존재하지 않습니다.")
+        );
 
-        if (token != null) {
-            if (jwtUtil.validateToken(token)) {
-                claims = jwtUtil.getUserInfoFromToken(token);
-            } else {
-                throw new IllegalArgumentException("Token Error");
-            }
-
-            //토큰에서 가져온 사용자 정보를 사용하여 DB 조회
-            User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-            );
-
-            Posts posts = postsRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
-            );
-
-            postsRepository.deleteById(id);
-        }
+        postsRepository.deleteById(id);
         return new ResponseStatusDto(StatusEnum.POSTS_DELETE_SUCCESS);
     }
 

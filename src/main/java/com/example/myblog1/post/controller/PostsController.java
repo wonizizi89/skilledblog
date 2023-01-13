@@ -45,13 +45,13 @@ public class PostsController {
 
   //선택한 포스트 수정 API
     @PutMapping("/{id}")
-    public PostsResponse updatePosts(@PathVariable Long id, @RequestBody PostsRequest postsRequest, HttpServletRequest request) {
-        return postsService.updatePosts(id, postsRequest,request);
+    public PostsResponse updatePosts(@PathVariable Long id, @RequestBody PostsRequest postsRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postsService.updatePosts(id, postsRequest,userDetails.getUser());
     }
 
     //선택한 포스트 삭제
     @DeleteMapping("/{id}")
-    public ResponseStatusDto deletePosts(@PathVariable Long id, HttpServletRequest request ) {
-        return postsService.deletePosts(id,request);
+    public ResponseStatusDto deletePosts(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails ) {
+        return postsService.deletePosts(id,userDetails.getUser());
     }
 }
