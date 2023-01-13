@@ -1,11 +1,13 @@
 package com.example.myblog1.post.controller;
 
 
+import com.example.myblog1.common.security.UserDetailsImpl;
 import com.example.myblog1.post.dto.PostsRequest;
 import com.example.myblog1.post.dto.PostsResponse;
 import com.example.myblog1.user.dto.ResponseStatusDto;
 import com.example.myblog1.post.service.PostsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,14 +23,11 @@ public class PostsController {
 
     //포스트 글 생성
     @PostMapping("")
-    public PostsResponse createPosts(@RequestBody PostsRequest postsRequest, HttpServletRequest request) {
-        PostsResponse response =postsService.createPosts(postsRequest, request);
+    public PostsResponse createPosts(@RequestBody PostsRequest postsRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        PostsResponse response =postsService.createPosts(postsRequest, userDetails.getUser());
         return response;
     }
-//    @GetMapping("/posts")
-//    public List<ResponsePostDto> getPosts() {
-//        return postService.getPostList();
-//    }
+
     //포스트 조회
     @GetMapping("")
     public List<PostsResponse> getPosts() {
