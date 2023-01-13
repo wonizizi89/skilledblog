@@ -26,7 +26,7 @@ import static org.hibernate.criterion.Restrictions.and;
 // @Secured 어노테이션 활성화//@Configuration 인스턴스에 @EnableMethodSecurity 애노테이션을 이용하면, 애노테이션을 기반으로 한 보안을 작동시킬 수 있다.
 public class WebSecurityConfig {
 
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -49,7 +49,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 사용하므로 세션 미사용
                 .and()
                 .authorizeHttpRequests()
-                .antMatchers("/api/users/**").permitAll()
+                .antMatchers("/api/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
