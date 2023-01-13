@@ -33,11 +33,11 @@ public class Comment extends Timestamped {
 
 
     public Comment(CommentRequest commentRequest, User user, Posts posts) {
-        this.content = commentRequest.getContent();
+        this.content = commentRequest.getComment();
         this.user = user;
         this.posts = posts;
     }
     public void updateComment(CommentRequest commentRequest) {
-        this.content = commentRequest.getContent();
+        this.content = commentRequest.getComment();
     }
 }

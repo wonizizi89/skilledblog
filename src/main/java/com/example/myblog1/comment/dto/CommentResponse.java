@@ -12,6 +12,7 @@ public class CommentResponse {
     private String content;
 
     public CommentResponse(Comment comment) {
+        this.id =comment.getId();
         this.username = comment.getUser().getUsername();
         this.content = comment.getContent();
     }

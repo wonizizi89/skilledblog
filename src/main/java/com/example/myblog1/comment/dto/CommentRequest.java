@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class CommentRequest {
     @NotNull
-    private String content;
+    private String comment;
 
 
 }
