@@ -1,6 +1,7 @@
 package com.example.myblog1.common.jwt;
 
 
+import com.example.myblog1.common.jwt.refreshToken.RefreshToken;
 import com.example.myblog1.common.security.UserDetailsServiceImpl;
 import com.example.myblog1.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -40,6 +40,7 @@ public class JwtUtil {
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
+
     @PostConstruct
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
@@ -59,7 +60,7 @@ public class JwtUtil {
     public String createToken(String username, UserRoleEnum role) {
         Date now = new Date();
 
-        return BEARER_PREFIX +
+        return   BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
                         .claim(AUTHORIZATION_KEY, role)
@@ -67,17 +68,16 @@ public class JwtUtil {
                         .setIssuedAt(now)
                         .signWith(key, signatureAlgorithm)
                         .compact();
-    }
 
+    }
     public String createRefreshToken() {
         Date now = new Date();
 
-        return BEARER_PREFIX +
-                Jwts.builder()
-                        .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
-                        .setIssuedAt(now)
-                        .signWith(key, signatureAlgorithm)
-                        .compact();
+        return Jwts.builder()
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
+                .signWith(key, signatureAlgorithm)
+                .compact();
     }
 
     // 토큰 검증
@@ -109,13 +109,19 @@ public class JwtUtil {
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
-    public String validateExpiredToken(String token){
-        try{
-            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return !claims.getBody().getExpiration().before(new Date());// 만료된 토큰임을 검증
-    }catch(Exception e){
-            return null;
+
+        public boolean validateRefreshToken(String token) {
+            try {
+                Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+                return !claims.getBody().getExpiration().before(new Date());
+            } catch (Exception e) {
+                return false;
+            }
         }
 
-
+    public Object createToken() {
+    }
 }
+
+
+

@@ -1,6 +1,10 @@
 package com.example.myblog1.user.service;
 
 
+import com.example.myblog1.common.jwt.TokenDto;
+import com.example.myblog1.common.jwt.refreshToken.RefreshToken;
+import com.example.myblog1.common.jwt.refreshToken.RefreshTokenRepository;
+import com.example.myblog1.common.jwt.refreshToken.RefreshTokenService;
 import com.example.myblog1.user.dto.LoginRequest;
 import com.example.myblog1.user.dto.ResignRequest;
 import com.example.myblog1.user.dto.ResponseStatusDto;
@@ -10,6 +14,8 @@ import com.example.myblog1.user.entity.UserRoleEnum;
 import com.example.myblog1.common.jwt.JwtUtil;
 import com.example.myblog1.user.entity.StatusEnum;
 import com.example.myblog1.user.repository.UserRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.Optional;
+
+import static com.example.myblog1.common.jwt.JwtUtil.*;
 
 
 @Service
@@ -29,7 +38,10 @@ public class UserService {
     private final JwtUtil jwtUtil;
     // ADMIN_TOKEN
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+    private static final String BEARER_PREFIX = "Bearer ";
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenRepository refreshTokenRepository;
+
     @Transactional
     public ResponseStatusDto signup(@Valid SignupRequest signupRequest) {
         String username = signupRequest.getUsername();
@@ -72,7 +84,7 @@ public class UserService {
         if (!passwordEncoder.matches(password,user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. ");
         }
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getUserRole()));
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, String.valueOf(jwtUtil.createToken(user.getUsername(),user.getUserRole())));
         //response에 헤더쪽 값을 넣어수 있는데 키값에는 AUTHORIZATION_HEADER과 토큰 생성 값을 넣어줌
 
         return new ResponseStatusDto(StatusEnum.LOGIN_SUCCESS);
@@ -90,4 +102,50 @@ public class UserService {
 
         return new ResponseStatusDto(StatusEnum.USER_DELETE_SUCCESS);
     }
+//        @Transactional
+//    public void reIssue(TokenRequestDto tokenRequestDto, HttpServletResponse response) {
+//        if(!jwtUtil.validateTokenExceptExpiration(tokenRequestDto.getRefreshToken())){
+//            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+//        }
+//
+//        User user = findUserByToken(tokenRequestDto);
+//
+//        if(!user.getRefreshToken().equals(tokenRequestDto.getRefreshToken())){
+//            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+//        }
+//        String refreshToken = jwtUtil.createRefreshToken();
+//
+//        user.updateRefreshToken(refreshToken);
+//        userRepository.saveAndFlush(user);
+//        addTokenToHeader(response, user);
+//    }
+    @Transactional
+    public void reIssue(TokenDto tokenDto, HttpServletResponse response){
+        if(!jwtUtil.validateRefreshToken(tokenDto.getRefreshToken())){
+            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+        }
+
+     String foundRefreshToken = RefreshTokenService.findRefreshTokenByUserName(tokenDto);
+    if(!foundRefreshToken.equals(tokenDto.getRefreshToken())){
+        throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+
+        String refreshToken = jwtUtil.createRefreshToken();
+
+        //   foundRefreshToken.updateRefreshToken();
+
+    }
+
+
+
+
+    }
+
+
+
+
+    //
+    //    private void addTokenToHeader(HttpServletResponse response, User user) {
+    //        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+    //        response.addHeader(JwtUtil.REFRESH_HEADER, user.getRefreshToken());
+    //    }
 }
