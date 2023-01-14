@@ -30,7 +30,9 @@ public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long TOKEN_TIME = 60 * 60 * 1000L; //1시간 
+    private static final long TOKEN_TIME = 30 * 60 * 1000L; //30 min
+
+    private static final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L * 24 * 14; //2week
 
     private final UserDetailsServiceImpl userDetailService;
     @Value("${jwt.secret.key}")
@@ -55,14 +57,25 @@ public class JwtUtil {
 
     // 토큰 생성
     public String createToken(String username, UserRoleEnum role) {
-        Date date = new Date();
+        Date now = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
                         .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))
-                        .setIssuedAt(date)
+                        .setExpiration(new Date(now.getTime() + TOKEN_TIME))
+                        .setIssuedAt(now)
+                        .signWith(key, signatureAlgorithm)
+                        .compact();
+    }
+
+    public String createRefreshToken() {
+        Date now = new Date();
+
+        return BEARER_PREFIX +
+                Jwts.builder()
+                        .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
+                        .setIssuedAt(now)
                         .signWith(key, signatureAlgorithm)
                         .compact();
     }
@@ -95,6 +108,14 @@ public class JwtUtil {
         UserDetails userDetails = userDetailService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
+
+    public String validateExpiredToken(String token){
+        try{
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return !claims.getBody().getExpiration().before(new Date());// 만료된 토큰임을 검증
+    }catch(Exception e){
+            return null;
+        }
 
 
 }
