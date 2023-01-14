@@ -1,11 +1,13 @@
 package com.example.myblog1.post.controller;
 
 
+import com.example.myblog1.common.security.UserDetailsImpl;
 import com.example.myblog1.post.dto.PostsRequest;
 import com.example.myblog1.post.dto.PostsResponse;
 import com.example.myblog1.user.dto.ResponseStatusDto;
 import com.example.myblog1.post.service.PostsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,14 +23,11 @@ public class PostsController {
 
     //포스트 글 생성
     @PostMapping("")
-    public PostsResponse createPosts(@RequestBody PostsRequest postsRequest, HttpServletRequest request) {
-        PostsResponse response =postsService.createPosts(postsRequest, request);
+    public PostsResponse createPosts(@RequestBody PostsRequest postsRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        PostsResponse response =postsService.createPosts(postsRequest, userDetails.getUser());
         return response;
     }
-//    @GetMapping("/posts")
-//    public List<ResponsePostDto> getPosts() {
-//        return postService.getPostList();
-//    }
+
     //포스트 조회
     @GetMapping("")
     public List<PostsResponse> getPosts() {
@@ -46,13 +45,13 @@ public class PostsController {
 
   //선택한 포스트 수정 API
     @PutMapping("/{id}")
-    public PostsResponse updatePosts(@PathVariable Long id, @RequestBody PostsRequest postsRequest, HttpServletRequest request) {
-        return postsService.updatePosts(id, postsRequest,request);
+    public PostsResponse updatePosts(@PathVariable Long id, @RequestBody PostsRequest postsRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postsService.updatePosts(id, postsRequest,userDetails.getUser());
     }
 
     //선택한 포스트 삭제
     @DeleteMapping("/{id}")
-    public ResponseStatusDto deletePosts(@PathVariable Long id, HttpServletRequest request ) {
-        return postsService.deletePosts(id,request);
+    public ResponseStatusDto deletePosts(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails ) {
+        return postsService.deletePosts(id,userDetails.getUser());
     }
 }

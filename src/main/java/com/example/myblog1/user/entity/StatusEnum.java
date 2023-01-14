@@ -8,9 +8,12 @@ import lombok.NoArgsConstructor;
 public enum StatusEnum {
     SIGNUP_SUCCESS(200,"회원가입 성공"),
     LOGIN_SUCCESS(200, "로그인 성공"),
-    DELETE_SUCCESS(200, "게시글 삭제 성공"),
 
-    COMMENT_DELETE_SUCCESS(200,"댓글 삭제 성공");
+    POSTS_DELETE_SUCCESS(200,"게시글 삭제 성공"),
+    USER_DELETE_SUCCESS(200,"회원 탈퇴 성공" );
+
+
+
 
 
     int statusCode;

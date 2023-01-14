@@ -32,12 +32,11 @@ public class User{
     @Enumerated(value=EnumType.STRING)
     private UserRoleEnum userRole;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")//지연로딩
-    List<Posts> postsList = new ArrayList<>();  //포스트와 일대다 관계
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)// Todo :cascade = CascadeType.REMOVE  시도해보기
+    List<Posts> postsList = new ArrayList<>();
 
 
-    //회원과 폴더의 관계
-    @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy ="user",orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     public User(String username, String password, String email,UserRoleEnum userRole) {

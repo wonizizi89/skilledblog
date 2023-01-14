@@ -2,6 +2,7 @@ package com.example.myblog1.user.service;
 
 
 import com.example.myblog1.user.dto.LoginRequest;
+import com.example.myblog1.user.dto.ResignRequest;
 import com.example.myblog1.user.dto.ResponseStatusDto;
 import com.example.myblog1.user.dto.SignupRequest;
 import com.example.myblog1.user.entity.User;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -76,4 +78,16 @@ public class UserService {
         return new ResponseStatusDto(StatusEnum.LOGIN_SUCCESS);
     }
 
+    public ResponseStatusDto resignMembership(Long id, ResignRequest resignRequest) {
+        User foundUser = userRepository.findById(id).orElseThrow(
+                ()-> new IllegalArgumentException("사용자가 존재 하지 않습니다.")
+        );
+       if(foundUser.getUsername().equals(resignRequest.getUsername())){
+           userRepository.delete(foundUser);
+       }else{
+           throw new IllegalArgumentException("접근할 수 있는 권한이 없습니다.");
+       }
+
+        return new ResponseStatusDto(StatusEnum.USER_DELETE_SUCCESS);
+    }
 }
