@@ -44,8 +44,8 @@ public class UserController {
     }
 
     @PostMapping("/reissue")
-    public void reissueAccessToken(@RequestBody TokenRequest tokenRequest, HttpServletResponse response){
-        userService.reissueAccessToken(tokenRequest, response);
+    public void reissueToken(@RequestBody TokenRequest tokenRequest, HttpServletResponse response){
+        userService.reissueToken(tokenRequest, response);
     }
 
 

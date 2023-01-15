@@ -91,8 +91,8 @@ public class UserService {
     }
 
     @Transactional
-    public void reissueAccessToken(TokenRequest tokenRequest, HttpServletResponse response) {
-        if (!jwtUtil.validateRefreshToken(tokenRequest.getRefreshToken())) {
+    public void reissueToken(TokenRequest tokenRequest, HttpServletResponse response) {
+        if (!jwtUtil.validateToken(tokenRequest.getRefreshToken())) {
             throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
         }
         User user = findUserByToken(tokenRequest);
