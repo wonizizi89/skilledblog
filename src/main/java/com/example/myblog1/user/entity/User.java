@@ -54,9 +54,9 @@ public class User{
         this.refreshToken = resfreshToken;
     }
 
-//    public boolean isAdmin() {
-//        return this.userRole == UserRoleEnum.ADMIN;
-//    }
+    public boolean isAdmin() {
+        return this.userRole == UserRoleEnum.ADMIN;
+    }
 
     public boolean hasComment(Comment comment) {
         return this.commentList.stream().anyMatch(x ->x.equals(comment));
