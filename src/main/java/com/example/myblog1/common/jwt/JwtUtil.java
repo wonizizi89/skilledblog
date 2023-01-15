@@ -1,7 +1,6 @@
 package com.example.myblog1.common.jwt;
 
 
-import com.example.myblog1.common.jwt.refreshToken.RefreshToken;
 import com.example.myblog1.common.security.UserDetailsServiceImpl;
 import com.example.myblog1.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
@@ -28,6 +27,7 @@ import java.util.Date;
 public class JwtUtil {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String REFRESH_TOKEN_HEADER ="RefreshToken";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
     private static final long TOKEN_TIME = 30 * 60 * 1000L; //30 min
@@ -70,10 +70,11 @@ public class JwtUtil {
                         .compact();
 
     }
-    public String createRefreshToken() {
+    public String createRefreshToken(String username) {
         Date now = new Date();
 
         return Jwts.builder()
+                .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
                 .signWith(key, signatureAlgorithm)
@@ -102,6 +103,15 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
+
+    /**
+     * 토큰으로 부터 Authentication 객체를 얻어온다.
+     * Authentication 안에 user의 정보가 담겨있음.
+     * UsernamePasswordAuthenticationToken 객체로 Authentication을 쉽게 만들수 있으며,
+     * 매게변수로 UserDetails, pw, authorities 까지 넣어주면
+     * setAuthenticated(true)로 인스턴스를 생성해주고
+     * Spring-Security는 그것을 체크해서 로그인을 처리함
+     */
     //인증 객체 생성
     public Authentication createAuthentication(String username) {
 
@@ -119,8 +129,8 @@ public class JwtUtil {
             }
         }
 
-    public Object createToken() {
-    }
+
+
 }
 
 
