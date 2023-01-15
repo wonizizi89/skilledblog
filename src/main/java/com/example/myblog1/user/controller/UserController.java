@@ -2,6 +2,7 @@ package com.example.myblog1.user.controller;
 
 
 //import com.example.myblog1.message.Message;
+import com.example.myblog1.user.dto.TokenRequest;
 import com.example.myblog1.user.dto.LoginRequest;
 import com.example.myblog1.user.dto.ResignRequest;
 import com.example.myblog1.user.dto.ResponseStatusDto;
@@ -10,7 +11,6 @@ import com.example.myblog1.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -42,6 +42,12 @@ public class UserController {
     public ResponseStatusDto resignMembership(@PathVariable Long id,@RequestBody ResignRequest resignRequest){
         return userService.resignMembership(id,resignRequest);
     }
+
+    @PostMapping("/reissue")
+    public void reissueAccessToken(@RequestBody TokenRequest tokenRequest, HttpServletResponse response){
+        userService.reissueAccessToken(tokenRequest, response);
+    }
+
 
 }
 
