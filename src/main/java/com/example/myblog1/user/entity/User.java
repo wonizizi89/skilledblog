@@ -2,6 +2,7 @@ package com.example.myblog1.user.entity;
 
 import com.example.myblog1.comment.entity.Comment;
 import com.example.myblog1.post.entity.Posts;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,6 +40,9 @@ public class User{
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="user",orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
+    @Column
+    private String refreshToken;
+
     public User(String username, String password, String email,UserRoleEnum userRole) {
         this.username = username;
         this.password = password;
@@ -46,19 +50,22 @@ public class User{
         this.userRole= userRole;
     }
 
-    public boolean isAdmin() {
-        return this.userRole == UserRoleEnum.ADMIN;
+    public void updateRefreshToken(String resfreshToken){
+        this.refreshToken = resfreshToken;
     }
 
-
+//    public boolean isAdmin() {
+//        return this.userRole == UserRoleEnum.ADMIN;
+//    }
 
     public boolean hasComment(Comment comment) {
         return this.commentList.stream().anyMatch(x ->x.equals(comment));
     }
 
 
+//    public UserRoleEnum getRole() {
+//        return userRole;
+//    }
 
-    public UserRoleEnum getRole() {
-        return userRole;
-    }
+
 }
