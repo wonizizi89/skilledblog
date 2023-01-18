@@ -26,6 +26,8 @@ public class SignupRequest {
     @Email
     @NotBlank
     private String email;
+
+
     private boolean admin = false;
     private String adminToken="";
 
