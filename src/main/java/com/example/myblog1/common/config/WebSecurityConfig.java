@@ -49,7 +49,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 사용하므로 세션 미사용
                 .and()
                 .authorizeHttpRequests()
-                .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/api/users/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
