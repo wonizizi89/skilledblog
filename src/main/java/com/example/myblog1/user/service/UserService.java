@@ -2,6 +2,9 @@ package com.example.myblog1.user.service;
 
 
 import com.example.myblog1.common.jwt.JwtUtil;
+import com.example.myblog1.post.dto.PostsResponse;
+import com.example.myblog1.post.entity.Posts;
+import com.example.myblog1.post.repository.PostsRepository;
 import com.example.myblog1.user.dto.*;
 import com.example.myblog1.user.entity.StatusEnum;
 import com.example.myblog1.user.entity.User;
@@ -9,13 +12,19 @@ import com.example.myblog1.user.entity.UserRoleEnum;
 import com.example.myblog1.user.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -28,6 +37,7 @@ public class UserService {
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private static final String BEARER_PREFIX = "Bearer ";
     private final PasswordEncoder passwordEncoder;
+    private final PostsRepository postsRepository;
 
     @Transactional
     public ResponseStatusDto signup(@Valid SignupRequest signupRequest) {
@@ -107,7 +117,7 @@ public class UserService {
         user.updateRefreshToken(refreshToken);
         userRepository.saveAndFlush(user);
         //AccessToken  재 생성
-        String newAccessToken = jwtUtil.createToken(user.getUsername(),user.getUserRole());
+        String newAccessToken = jwtUtil.createToken(user.getUsername(), user.getUserRole());
 
         //AccessToken 발행시 refreshToken 함께 재 발행
         response.addHeader(jwtUtil.AUTHORIZATION_HEADER, newAccessToken);
@@ -115,11 +125,27 @@ public class UserService {
     }
 
 
-        private User findUserByToken(TokenRequest tokenRequest){
-         Claims claims = jwtUtil.getUserInfoFromToken(tokenRequest.getAccessToken().substring(7));
-         String username = claims.getSubject();
-         return userRepository.findByUsername(username).orElseThrow(
-                 ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")
-         );
+    private User findUserByToken(TokenRequest tokenRequest) {
+        Claims claims = jwtUtil.getUserInfoFromToken(tokenRequest.getAccessToken().substring(7));
+        String username = claims.getSubject();
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
+        );
+    }
+
+
+
+    private Pageable pageableSetting(int pageChoice) {
+        Sort.Direction direction = Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, "id");
+        Pageable pageable = PageRequest.of(pageChoice - 1, 4, sort);
+        return pageable;
+
+    }
+
+    public List<PostsResponse> searchByKeyword(String title, String content, int pageChoice) {
+        Page<Posts> postsListPage = postsRepository.findAllSearch(title, content, pageableSetting(pageChoice));
+        List<PostsResponse> postsResponseList = postsListPage.stream().map(PostsResponse::new).collect(Collectors.toList());
+        return postsResponseList;
     }
 }

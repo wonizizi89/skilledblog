@@ -42,8 +42,8 @@ public class PostsService {
 
 
     @Transactional
-    public List<PostsResponse> getPostsList(int pageChoice,User user){
-        Page<Posts> postsListPage = postsRepository.findAllById(user.getId(),pageableSetting(pageChoice));
+    public List<PostsResponse> getPostsList(int pageChoice){
+        Page<Posts> postsListPage = postsRepository.findAll(pageableSetting(pageChoice));
         if(postsListPage.isEmpty()){
             throw new IllegalArgumentException("해당 페이지가 존재하지 않습니다.");
         }

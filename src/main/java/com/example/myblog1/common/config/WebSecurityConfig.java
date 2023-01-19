@@ -39,7 +39,7 @@ public class WebSecurityConfig {
                 .requestMatchers(PathRequest.toH2Console())
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
-
+ //todo 최종시 권한 설정 한번 더 체크하기
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

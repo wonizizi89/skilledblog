@@ -28,13 +28,15 @@ public class PostsController {
     }
 
     //포스트 조회
+    //todo 댓글도 함께 조회
     @GetMapping("/page/{postChoice}")
-    public List<PostsResponse> getPostsList(@PathVariable int postChoice,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postsService.getPostsList(postChoice,userDetails.getUser());
+    public List<PostsResponse> getPostsList(@PathVariable int postChoice) {
+        return postsService.getPostsList(postChoice);
 
     }
 
     //해당 포스트 조회
+  //  todo 댓글도 함께 조회
     @GetMapping("/{id}")
     public PostsResponse getSelectPosts(@PathVariable Long id) {
         return postsService.getSelectPosts(id);
