@@ -2,6 +2,10 @@ package com.example.myblog1.user.controller;
 
 
 //import com.example.myblog1.message.Message;
+
+import com.example.myblog1.common.security.UserDetailsImpl;
+import com.example.myblog1.post.dto.PostsResponse;
+import com.example.myblog1.post.entity.Posts;
 import com.example.myblog1.user.dto.TokenRequest;
 import com.example.myblog1.user.dto.LoginRequest;
 import com.example.myblog1.user.dto.ResignRequest;
@@ -9,19 +13,24 @@ import com.example.myblog1.user.dto.ResponseStatusDto;
 import com.example.myblog1.user.dto.SignupRequest;
 import com.example.myblog1.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
 
-    //todo 회원탈퇴 구현
-    private final UserService userService;
 
+    private final UserService userService;
 
 
     @PostMapping("/signup")
@@ -39,15 +48,15 @@ public class UserController {
     }
 
     @DeleteMapping("/resign/{id}")
-    public ResponseStatusDto resignMembership(@PathVariable Long id,@RequestBody ResignRequest resignRequest){
-        return userService.resignMembership(id,resignRequest);
+    public ResponseStatusDto resignMembership(@PathVariable Long id, @RequestBody ResignRequest resignRequest) {
+        return userService.resignMembership(id, resignRequest);
     }
 
-    @PostMapping("/reissue")
-    public void reissueToken(@RequestBody TokenRequest tokenRequest, HttpServletResponse response){
-        userService.reissueToken(tokenRequest, response);
+    //title or content 검색기능 ,페이징
+    @GetMapping("/keyword")
+    public List<PostsResponse> searchByKeyword(@RequestParam String title, @RequestParam String content ,@RequestParam int pageChoice){
+        return userService.searchByKeyword(title,content,pageChoice);
     }
-
 
 }
 
