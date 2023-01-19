@@ -1,7 +1,7 @@
 package com.example.myblog1.post.entity;
 
-import com.example.myblog1.common.Timestamped;
 import com.example.myblog1.comment.entity.Comment;
+import com.example.myblog1.common.Timestamped;
 import com.example.myblog1.post.dto.PostsRequest;
 import com.example.myblog1.user.entity.User;
 import lombok.Getter;
@@ -29,18 +29,21 @@ public class Posts extends Timestamped {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "USER_ID",nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.REMOVE)
     List<Comment> commentList = new ArrayList<>();
 
     public Posts(PostsRequest requestDto, User user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.user = user;
+        this.commentList = getCommentList();
 
     }
+
+
 
     public void updatePosts(PostsRequest requestDto) {
         this.title = requestDto.getTitle();

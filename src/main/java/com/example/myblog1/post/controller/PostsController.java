@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -29,9 +28,9 @@ public class PostsController {
     }
 
     //포스트 조회
-    @GetMapping("")
-    public List<PostsResponse> getPosts() {
-        return postsService.getPosts();
+    @GetMapping("{postChoice}")
+    public List<PostsResponse> getPostsList(@PathVariable int postChoice,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postsService.getPostsList(postChoice,userDetails.getUser());
 
     }
 
