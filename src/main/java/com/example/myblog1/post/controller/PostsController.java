@@ -28,7 +28,7 @@ public class PostsController {
     }
 
     //포스트 조회
-    @GetMapping("{postChoice}")
+    @GetMapping("/page/{postChoice}")
     public List<PostsResponse> getPostsList(@PathVariable int postChoice,@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postsService.getPostsList(postChoice,userDetails.getUser());
 
