@@ -2,6 +2,8 @@ package com.example.myblog1.post.service;
 
 import com.example.myblog1.comment.entity.Comment;
 import com.example.myblog1.comment.repository.CommentRepository;
+import com.example.myblog1.common.exception.CustomException;
+import com.example.myblog1.common.exception.ExceptionStatus;
 import com.example.myblog1.post.dto.PostRequest;
 import com.example.myblog1.post.dto.PostResponse;
 import com.example.myblog1.user.dto.ResponseStatusDto;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.swing.undo.CannotUndoException;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +58,7 @@ public class PostService {
     @Transactional
     public PostResponse getSelectPost(Long id) {
         Post post = postsRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
+                () -> new CustomException(ExceptionStatus.POST_IS_EMPTY)
         );
         return new PostResponse(post);
 
@@ -66,7 +69,7 @@ public class PostService {
     @Transactional
     public PostResponse updatePost(Long id, PostRequest postRequest, User user) {
         Post post = postsRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
-                () -> new NullPointerException("해당 게시글이 존재 하지 않습니다.")
+                () -> new CustomException(ExceptionStatus.POST_IS_EMPTY)
         );
         post.updatePosts(postRequest);
         postsRepository.saveAndFlush(post);
@@ -79,7 +82,7 @@ public class PostService {
     @Transactional
     public ResponseStatusDto deletePost(Long id, User user) {
         Post post = postsRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
-                () -> new NullPointerException("해당 게시글이 존재하지 않습니다.")
+                () -> new CustomException(ExceptionStatus.POST_IS_EMPTY)
         );
 
         postsRepository.deleteById(id);

@@ -1,6 +1,8 @@
 package com.example.myblog1.user.service;
 
 
+import com.example.myblog1.common.exception.CustomException;
+import com.example.myblog1.common.exception.ExceptionStatus;
 import com.example.myblog1.common.jwt.JwtUtil;
 import com.example.myblog1.post.dto.PostResponse;
 import com.example.myblog1.post.entity.Post;
@@ -10,6 +12,7 @@ import com.example.myblog1.user.entity.StatusEnum;
 import com.example.myblog1.user.entity.User;
 import com.example.myblog1.user.entity.UserRoleEnum;
 import com.example.myblog1.user.repository.UserRepository;
+import com.ibm.cuda.CudaException;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.undo.CannotUndoException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
@@ -46,7 +50,7 @@ public class UserService {
         //회원중복확인
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 username 입니다.");
+            throw new CustomException(ExceptionStatus.USERNAME_IS_EXIST);
         }
 
         String email = signupRequest.getEmail();
@@ -55,7 +59,7 @@ public class UserService {
         UserRoleEnum role = UserRoleEnum.USER;
         if (signupRequest.isAdmin()) {
             if (!signupRequest.getAdminToken().equals(ADMIN_TOKEN)) {
-                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능 합니다.");
+                throw new CustomException(ExceptionStatus.ADMIN_PASSWORDS_DO_NOT_MATCH);
             }
             role = UserRoleEnum.ADMIN;
         }
@@ -74,11 +78,11 @@ public class UserService {
 
         // 사용자 확인
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
+                () -> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST)
         );
         //비밀번호 확인
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. ");
+            throw new CustomException(ExceptionStatus.PASSWORDS_DO_NOT_MATCH);
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, String.valueOf(jwtUtil.createToken(user.getUsername(), user.getUserRole())));
         //response에 헤더쪽 값을 넣어수 있는데 키값에는 AUTHORIZATION_HEADER과 토큰 생성 값을 넣어줌
@@ -88,12 +92,12 @@ public class UserService {
     @Transactional
     public ResponseStatusDto resignMembership(Long id, ResignRequest resignRequest) {
         User foundUser = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재 하지 않습니다.")
+                () -> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST)
         );
         if (foundUser.getUsername().equals(resignRequest.getUsername())) {
             userRepository.delete(foundUser);
         } else {
-            throw new IllegalArgumentException("접근할 수 있는 권한이 없습니다.");
+            throw new CustomException(ExceptionStatus.AUTHORIZATION_EXCEPTION);
         }
 
         return new ResponseStatusDto(StatusEnum.USER_DELETE_SUCCESS);
@@ -102,12 +106,12 @@ public class UserService {
     @Transactional
     public void reissueToken(TokenRequest tokenRequest, HttpServletResponse response) {
         if (!jwtUtil.validateToken(tokenRequest.getRefreshToken())) {
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+            throw new CustomException(ExceptionStatus.INVALID_TOKEN);
         }
         User user = findUserByToken(tokenRequest);
 
         if (!user.getRefreshToken().equals(tokenRequest.getRefreshToken())) {
-            throw new IllegalArgumentException("refreshToken 이 일치 하지 않습니다.");
+            throw new CustomException(ExceptionStatus.REFRESH_TOKEN_DO_NOT_MATCH);
         }
 
         //userRepository 에 refreshToken 을 저장
@@ -128,7 +132,7 @@ public class UserService {
         Claims claims = jwtUtil.getUserInfoFromToken(tokenRequest.getAccessToken().substring(7));
         String username = claims.getSubject();
         return userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
+                () -> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST)
         );
     }
 
