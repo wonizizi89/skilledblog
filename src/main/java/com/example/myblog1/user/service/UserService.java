@@ -2,9 +2,9 @@ package com.example.myblog1.user.service;
 
 
 import com.example.myblog1.common.jwt.JwtUtil;
-import com.example.myblog1.post.dto.PostsResponse;
-import com.example.myblog1.post.entity.Posts;
-import com.example.myblog1.post.repository.PostsRepository;
+import com.example.myblog1.post.dto.PostResponse;
+import com.example.myblog1.post.entity.Post;
+import com.example.myblog1.post.repository.PostRepository;
 import com.example.myblog1.user.dto.*;
 import com.example.myblog1.user.entity.StatusEnum;
 import com.example.myblog1.user.entity.User;
@@ -14,7 +14,6 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class UserService {
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private static final String BEARER_PREFIX = "Bearer ";
     private final PasswordEncoder passwordEncoder;
-    private final PostsRepository postsRepository;
+    private final PostRepository postsRepository;
 
     @Transactional
     public ResponseStatusDto signup(@Valid SignupRequest signupRequest) {
@@ -86,7 +85,7 @@ public class UserService {
 
         return new ResponseStatusDto(StatusEnum.LOGIN_SUCCESS);
     }
-
+    @Transactional
     public ResponseStatusDto resignMembership(Long id, ResignRequest resignRequest) {
         User foundUser = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("사용자가 존재 하지 않습니다.")
@@ -135,17 +134,9 @@ public class UserService {
 
 
 
-    private Pageable pageableSetting(int pageChoice) {
-        Sort.Direction direction = Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, "id");
-        Pageable pageable = PageRequest.of(pageChoice - 1, 4, sort);
-        return pageable;
-
-    }
-
-    public List<PostsResponse> searchByKeyword(String title, String content, int pageChoice) {
-        Page<Posts> postsListPage = postsRepository.findAllSearch(title, content, pageableSetting(pageChoice));
-        List<PostsResponse> postsResponseList = postsListPage.stream().map(PostsResponse::new).collect(Collectors.toList());
-        return postsResponseList;
+    public List<PostResponse> searchByKeyword(String title, String content, int pageChoice) {
+        Page<Post> postsListPage = postsRepository.findAllSearch(title, content, PageRequest.of(pageChoice - 1, 4,Sort.Direction.DESC,"id"));
+        List<PostResponse> postResponseList = postsListPage.stream().map(PostResponse::new).collect(Collectors.toList());
+        return postResponseList;
     }
 }

@@ -1,8 +1,7 @@
 package com.example.myblog1.user.entity;
 
 import com.example.myblog1.comment.entity.Comment;
-import com.example.myblog1.post.entity.Posts;
-import lombok.AllArgsConstructor;
+import com.example.myblog1.post.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,11 +32,11 @@ public class User{
     @Enumerated(value=EnumType.STRING)
     private UserRoleEnum userRole;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)// Todo :cascade = CascadeType.REMOVE  시도해보기
-    List<Posts> postsList = new ArrayList<>();
+    @OneToMany(mappedBy = "user", orphanRemoval = true)// Todo :cascade = CascadeType.REMOVE  시도해보기
+    List<Post> postList = new ArrayList<>();
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy ="user",orphanRemoval = true)
+    @OneToMany(mappedBy ="user",orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     @Column

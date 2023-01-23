@@ -2,7 +2,7 @@ package com.example.myblog1.post.entity;
 
 import com.example.myblog1.comment.entity.Comment;
 import com.example.myblog1.common.Timestamped;
-import com.example.myblog1.post.dto.PostsRequest;
+import com.example.myblog1.post.dto.PostRequest;
 import com.example.myblog1.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Posts extends Timestamped {
+public class Post extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,20 +32,20 @@ public class Posts extends Timestamped {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "posts", cascade = CascadeType.REMOVE)
-    List<Comment> commentList = new ArrayList<>();
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    List<Comment> comments = new ArrayList<>();
 
-    public Posts(PostsRequest requestDto, User user) {
+     //todo  requestDto -> .toEntity() 이용하여 결합도 높이고 의존도 낮추기
+     //todo Entity -> responseDto
+    public Post(PostRequest requestDto, User user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.user = user;
-        this.commentList = getCommentList();
-
     }
 
 
 
-    public void updatePosts(PostsRequest requestDto) {
+    public void updatePosts(PostRequest requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
 

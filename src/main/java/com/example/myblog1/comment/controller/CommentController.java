@@ -38,7 +38,7 @@ public class CommentController {
                                        @AuthenticationPrincipal UserDetailsImpl userDetails){
         commentServiceImpl.editComment(id,commentRequest,userDetails.getUser());
         return ResponseEntity.ok("수정 완료");
-                //ResponseEntity.status(HttpStatus.OK).body("댓글 수정 완료");
+
 
     }
 

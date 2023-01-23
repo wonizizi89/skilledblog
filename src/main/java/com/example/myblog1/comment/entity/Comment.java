@@ -2,7 +2,7 @@ package com.example.myblog1.comment.entity;
 
 import com.example.myblog1.common.Timestamped;
 import com.example.myblog1.comment.dto.CommentRequest;
-import com.example.myblog1.post.entity.Posts;
+import com.example.myblog1.post.entity.Post;
 import com.example.myblog1.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,14 +28,14 @@ public class Comment extends Timestamped {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "POSTS_ID", nullable = false)
-    private Posts posts;
+    @JoinColumn(name = "POST_ID", nullable = false)
+    private Post post;
 
 
-    public Comment(CommentRequest commentRequest, User user, Posts posts) {
+    public Comment(CommentRequest commentRequest, User user, Post post) {
         this.comment = commentRequest.getComment();
         this.user = user;
-        this.posts = posts;
+        this.post = post;
     }
     public void updateComment(CommentRequest commentRequest) {
         this.comment = commentRequest.getComment();

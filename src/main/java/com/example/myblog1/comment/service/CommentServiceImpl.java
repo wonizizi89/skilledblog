@@ -1,21 +1,16 @@
 package com.example.myblog1.comment.service;
 
 import com.example.myblog1.comment.dto.CommentRequest;
-import com.example.myblog1.comment.dto.CommentResponse;
-import com.example.myblog1.user.dto.ResponseStatusDto;
 import com.example.myblog1.comment.entity.Comment;
-import com.example.myblog1.post.entity.Posts;
+import com.example.myblog1.post.entity.Post;
 import com.example.myblog1.user.entity.User;
 import com.example.myblog1.common.jwt.JwtUtil;
-import com.example.myblog1.user.entity.StatusEnum;
 import com.example.myblog1.comment.repository.CommentRepository;
-import com.example.myblog1.post.repository.PostsRepository;
+import com.example.myblog1.post.repository.PostRepository;
 import com.example.myblog1.user.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 @Service
@@ -24,19 +19,19 @@ public class CommentServiceImpl implements CommentService {
 
     private final JwtUtil jwtUtil;
     private final CommentRepository commentRepository;
-    private final PostsRepository postsRepository;
+    private final PostRepository postsRepository;
     private final UserRepository userRepository;
 
 
     @Override
     @Transactional
     public void createComment(Long postsId, CommentRequest commentRequest, User user) {
-        Posts posts = postsRepository.findByIdAndUserId(postsId,user.getId()).orElseThrow(
+        Post post = postsRepository.findByIdAndUserId(postsId,user.getId()).orElseThrow(
                 () -> new NullPointerException(("해당 글이 존재하지 않습니다."))
         );
 
         //선택한 게시글이 있다면 댓글로 등록하고 등록된 댓글 반환
-        Comment comment = commentRepository.saveAndFlush(new Comment(commentRequest, user, posts));
+        Comment comment = commentRepository.saveAndFlush(new Comment(commentRequest, user, post));
 
     }
 
@@ -60,16 +55,14 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 댓글이 없습니다.")
         );
-        validateComment(comment, user);
         commentRepository.deleteById(id);
 
     }
 
-    private void validateComment(Comment comment, User user) {
-        if (!user.isAdmin() && !user.hasComment(comment)) {
-            throw new IllegalArgumentException("해당 작성자의 댓글이 아닙니다.");
-        }
-
-
-    }
+//    private void validateComment(Comment comment, User user) {
+//        if (!user.isAdmin() && !user.hasComment(comment)) {
+//            throw new IllegalArgumentException("해당 작성자의 댓글이 아닙니다.");
+//        }
+//
+//    }
 }

@@ -1,6 +1,5 @@
 package com.example.myblog1;
 
-import com.example.myblog1.post.entity.Posts;
 import com.example.myblog1.user.entity.User;
 import com.example.myblog1.user.entity.UserRoleEnum;
 import com.example.myblog1.user.repository.UserRepository;
