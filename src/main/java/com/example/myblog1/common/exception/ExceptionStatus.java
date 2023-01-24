@@ -5,8 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor //블로그방식
-//@AllArgsConstructor 팀원방식
+@RequiredArgsConstructor
 public enum ExceptionStatus {
 
     PASSWORDS_DO_NOT_MATCH(401,"비밀번호가 일치 하지 않습니다."),

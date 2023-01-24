@@ -1,5 +1,6 @@
 package com.example.myblog1.user.dto;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import javax.validation.constraints.Size;
 import javax.validation.constraints.Pattern;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResignRequest {
 
     @NotBlank

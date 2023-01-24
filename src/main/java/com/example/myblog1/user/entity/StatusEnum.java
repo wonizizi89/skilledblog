@@ -1,10 +1,11 @@
 package com.example.myblog1.user.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public enum StatusEnum {
     SIGNUP_SUCCESS(200,"회원가입 성공"),
     LOGIN_SUCCESS(200, "로그인 성공"),

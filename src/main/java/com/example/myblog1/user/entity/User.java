@@ -2,6 +2,7 @@ package com.example.myblog1.user.entity;
 
 import com.example.myblog1.comment.entity.Comment;
 import com.example.myblog1.post.entity.Post;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "users")
 public class User{
 

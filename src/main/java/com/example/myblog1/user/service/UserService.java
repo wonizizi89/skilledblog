@@ -12,7 +12,6 @@ import com.example.myblog1.user.entity.StatusEnum;
 import com.example.myblog1.user.entity.User;
 import com.example.myblog1.user.entity.UserRoleEnum;
 import com.example.myblog1.user.repository.UserRepository;
-import com.ibm.cuda.CudaException;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.undo.CannotUndoException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
@@ -38,7 +36,6 @@ public class UserService {
     private final JwtUtil jwtUtil;
     // ADMIN_TOKEN
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
-    private static final String BEARER_PREFIX = "Bearer ";
     private final PasswordEncoder passwordEncoder;
     private final PostRepository postsRepository;
 
@@ -72,7 +69,7 @@ public class UserService {
     }
 
     @Transactional // readOnly= true  하면 에러남
-    public ResponseStatusDto login(LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseStatusDto login(@Valid LoginRequest loginRequest, HttpServletResponse response) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 
