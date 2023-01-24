@@ -23,7 +23,7 @@ public class PostResponse {
     private final List<CommentResponse> comments;
 
 
-
+    // Entity -> responseDto
     public PostResponse(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();

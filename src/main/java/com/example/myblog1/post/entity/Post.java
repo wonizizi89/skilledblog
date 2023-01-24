@@ -4,6 +4,7 @@ import com.example.myblog1.comment.entity.Comment;
 import com.example.myblog1.common.Timestamped;
 import com.example.myblog1.post.dto.PostRequest;
 import com.example.myblog1.user.entity.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,15 +36,15 @@ public class Post extends Timestamped {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     List<Comment> comments = new ArrayList<>();
 
-     //todo  requestDto -> .toEntity() 이용하여 결합도 높이고 의존도 낮추기
-     //todo Entity -> responseDto
-    public Post(PostRequest requestDto, User user) {
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
+
+    //todo  requestDto -> .toEntity() 이용하여 결합도 높이고 의존도 낮추기
+
+    @Builder
+    public Post(String title, String content, User user) {
+        this.title = title;
+        this.content = content;
         this.user = user;
     }
-
-
 
     public void updatePosts(PostRequest requestDto) {
         this.title = requestDto.getTitle();

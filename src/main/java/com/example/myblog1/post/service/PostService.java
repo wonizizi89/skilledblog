@@ -29,15 +29,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostService {
 
-    private final PostRepository postsRepository;
-    private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
-    private final CommentRepository commentRepository;
-
+    private final PostRepository postRepository;
 
     @Transactional
     public PostResponse createPost(PostRequest postRequest, User user) {
-        Post post = postsRepository.save(new Post(postRequest, user));
+     //   Post post = postRepository.save(new Post(postRequest, user));
+        Post post = postRepository.save(postRequest.toEntity(user));
+
         return new PostResponse(post);
     }
 
@@ -45,9 +43,9 @@ public class PostService {
 
     @Transactional
     public List<PostResponse> getPosts(int pageChoice){
-        Page<Post> postsListPage = postsRepository.findAll(PageRequest.of(pageChoice-1,4,Sort.Direction.DESC,"id"));//페이징 셋팅
+        Page<Post> postsListPage = postRepository.findAll(PageRequest.of(pageChoice-1,4,Sort.Direction.DESC,"id"));//페이징 셋팅
         if(postsListPage.isEmpty()){
-            throw new IllegalArgumentException("해당 페이지가 존재하지 않습니다.");
+            throw new CustomException(ExceptionStatus.POST_IS_EMPTY);
         }
         List<PostResponse> postsResponses = postsListPage.stream().map(PostResponse::new).collect(Collectors.toList());
         return postsResponses;
@@ -57,7 +55,7 @@ public class PostService {
 
     @Transactional
     public PostResponse getSelectPost(Long id) {
-        Post post = postsRepository.findById(id).orElseThrow(
+        Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(ExceptionStatus.POST_IS_EMPTY)
         );
         return new PostResponse(post);
@@ -68,11 +66,11 @@ public class PostService {
 
     @Transactional
     public PostResponse updatePost(Long id, PostRequest postRequest, User user) {
-        Post post = postsRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
+        Post post = postRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
                 () -> new CustomException(ExceptionStatus.POST_IS_EMPTY)
         );
         post.updatePosts(postRequest);
-        postsRepository.saveAndFlush(post);
+        postRepository.saveAndFlush(post);
 
         return new PostResponse(post);
 
@@ -81,11 +79,11 @@ public class PostService {
 
     @Transactional
     public ResponseStatusDto deletePost(Long id, User user) {
-        Post post = postsRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
+        Post post = postRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
                 () -> new CustomException(ExceptionStatus.POST_IS_EMPTY)
         );
 
-        postsRepository.deleteById(id);
+        postRepository.deleteById(id);
         return new ResponseStatusDto(StatusEnum.POSTS_DELETE_SUCCESS);
     }
 

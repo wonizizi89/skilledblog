@@ -19,7 +19,6 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
-    private final JwtUtil jwtUtil;
     private final CommentRepository commentRepository;
     private final PostRepository postsRepository;
 
@@ -33,8 +32,8 @@ public class CommentServiceImpl implements CommentService {
         );
 
         //선택한 게시글이 있다면 댓글로 등록하고 등록된 댓글 반환
-        Comment comment = commentRepository.saveAndFlush(new Comment(commentRequest, user, post));
-
+       // Comment comment = commentRepository.save(new Comment(commentRequest, user, post));
+       Comment comment = commentRepository.save(commentRequest.toEntity(user,post));
     }
 
     @Override
@@ -44,8 +43,8 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
                 () -> new CustomException(ExceptionStatus.COMMENT_IS_EMPTY)
         );
-        comment.updateComment(commentRequest);
-        commentRepository.saveAndFlush(comment);
+        comment.updateComment(commentRequest.getComment());
+        commentRepository.save(comment);
 
     }
 
