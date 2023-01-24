@@ -28,7 +28,7 @@ public class PostController {
     }
 
     //포스트 조회
-    //todo 댓글도 함께 조회
+
     @GetMapping("/page/{postChoice}")
     public List<PostResponse> getPosts(@PathVariable int postChoice) {
         return postService.getPosts(postChoice);
@@ -36,7 +36,7 @@ public class PostController {
     }
 
     //해당 포스트 조회
-  //  todo 댓글도 함께 조회
+
     @GetMapping("/{id}")
     public PostResponse getSelectPost(@PathVariable Long id) {
         return postService.getSelectPost(id);
