@@ -23,6 +23,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,4 +88,13 @@ public class PostService {
         return new ResponseStatusDto(StatusEnum.POSTS_DELETE_SUCCESS);
     }
 
+
+
+
+    public Post findById(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                ()->new CustomException(ExceptionStatus.POST_IS_EMPTY)
+        );
+        return post;
+    }
 }
