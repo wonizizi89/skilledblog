@@ -29,9 +29,9 @@ public class PostService {
     private final PostRepository postRepository;
 
     @Transactional
-    public PostResponse createPost(PostRequest postRequest, User user) {
+    public PostResponse createPost(PostRequest postRequest, Long id) {
      //   Post post = postRepository.save(new Post(postRequest, user));
-        Post post = postRepository.save(postRequest.toEntity(user));
+        Post post = postRepository.save(postRequest.toEntity(id));
 
         return new PostResponse(post);
     }
@@ -39,8 +39,8 @@ public class PostService {
 
 
     @Transactional
-    public Result getPosts(int pageChoice){
-        Page<Post> postsListPage = postRepository.findAll(PageRequest.of(pageChoice-1,4,Sort.Direction.DESC,"id"));//페이징 셋팅
+    public Result getPosts(int page, int size){
+        Page<Post> postsListPage = postRepository.findAll(PageRequest.of(page-1,size,Sort.Direction.DESC,"id"));//페이징 셋팅
         if(postsListPage.isEmpty()){
             throw new CustomException(ExceptionStatus.POST_IS_EMPTY);
         }

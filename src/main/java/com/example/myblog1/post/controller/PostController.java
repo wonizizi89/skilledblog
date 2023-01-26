@@ -21,15 +21,16 @@ public class PostController {
     //포스트 글 생성
     @PostMapping("")
     public PostResponse createPost(@RequestBody PostRequest postRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        PostResponse response = postService.createPost(postRequest, userDetails.getUser());
+        PostResponse response = postService.createPost(postRequest, userDetails.getUser().getId());
         return response;
     }
 
     //포스트 조회
 
-    @GetMapping("/page/{postChoice}")
-    public PostService.Result getPosts(@PathVariable int postChoice) {
-        return postService.getPosts(postChoice);
+    @GetMapping("/page")
+    public PostService.Result getPosts(@RequestParam("page") int page,
+                                       @RequestParam("size") int size) {
+        return postService.getPosts(page, size);
 
     }
 

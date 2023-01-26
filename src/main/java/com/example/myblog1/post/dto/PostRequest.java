@@ -13,11 +13,11 @@ public class PostRequest { //클라이언트에서 넘어오는 값을 이 객�
 
 
    /* dto -> Entity */
-    public Post toEntity(User user){
+    public Post toEntity(User id){
         return Post.builder()
                 .title(title)
                 .content(content)
-                .user(user)
+                .user(id)
                 .build();
     }
 }
