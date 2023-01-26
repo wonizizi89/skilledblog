@@ -59,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
                 () -> new CustomException(ExceptionStatus.COMMENT_IS_EMPTY)
         );
-        commentRepository.deleteById(id);
+        commentRepository.delete(comment);
 
     }
 

@@ -4,13 +4,11 @@ package com.example.myblog1.post.controller;
 import com.example.myblog1.common.security.UserDetailsImpl;
 import com.example.myblog1.post.dto.PostRequest;
 import com.example.myblog1.post.dto.PostResponse;
-import com.example.myblog1.user.dto.ResponseStatusDto;
 import com.example.myblog1.post.service.PostService;
+import com.example.myblog1.user.dto.ResponseStatusDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -30,7 +28,7 @@ public class PostController {
     //포스트 조회
 
     @GetMapping("/page/{postChoice}")
-    public List<PostResponse> getPosts(@PathVariable int postChoice) {
+    public PostService.Result getPosts(@PathVariable int postChoice) {
         return postService.getPosts(postChoice);
 
     }

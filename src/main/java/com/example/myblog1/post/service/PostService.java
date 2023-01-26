@@ -1,29 +1,25 @@
 package com.example.myblog1.post.service;
 
-import com.example.myblog1.comment.entity.Comment;
-import com.example.myblog1.comment.repository.CommentRepository;
 import com.example.myblog1.common.exception.CustomException;
 import com.example.myblog1.common.exception.ExceptionStatus;
 import com.example.myblog1.post.dto.PostRequest;
 import com.example.myblog1.post.dto.PostResponse;
-import com.example.myblog1.user.dto.ResponseStatusDto;
 import com.example.myblog1.post.entity.Post;
-import com.example.myblog1.user.entity.User;
-import com.example.myblog1.common.jwt.JwtUtil;
-import com.example.myblog1.user.entity.StatusEnum;
 import com.example.myblog1.post.repository.PostRepository;
-import com.example.myblog1.user.repository.UserRepository;
+import com.example.myblog1.user.dto.ResponseStatusDto;
+import com.example.myblog1.user.entity.StatusEnum;
+import com.example.myblog1.user.entity.User;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.swing.undo.CannotUndoException;
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,14 +39,25 @@ public class PostService {
 
 
     @Transactional
-    public List<PostResponse> getPosts(int pageChoice){
+    public Result getPosts(int pageChoice){
         Page<Post> postsListPage = postRepository.findAll(PageRequest.of(pageChoice-1,4,Sort.Direction.DESC,"id"));//페이징 셋팅
         if(postsListPage.isEmpty()){
             throw new CustomException(ExceptionStatus.POST_IS_EMPTY);
         }
         List<PostResponse> postsResponses = postsListPage.stream().map(PostResponse::new).collect(Collectors.toList());
-        return postsResponses;
+        return new Result(postsResponses.size(),postsResponses);
+    }
 
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class Result <T>{
+        private T count;
+        private T data;
+
+        public Result(T count,T data) {
+            this.count = count;
+            this.data = data;
+        }
     }
 
 
