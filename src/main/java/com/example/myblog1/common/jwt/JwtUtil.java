@@ -6,6 +6,8 @@ import com.example.myblog1.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,7 @@ import java.util.Date;
 
 @Slf4j
 @Component
+@NoArgsConstructor(force = true,access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
 public class JwtUtil {
 

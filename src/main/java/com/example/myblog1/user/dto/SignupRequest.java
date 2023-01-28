@@ -1,6 +1,7 @@
 package com.example.myblog1.user.dto;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,5 +32,12 @@ public class SignupRequest {
 
     private boolean admin = false;
     private String adminToken="";
-
+    @Builder
+    public SignupRequest(String username, String password, String email, boolean admin, String adminToken) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.admin = admin;
+        this.adminToken = adminToken;
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.myblog1.user.dto;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,5 +24,9 @@ public class LoginRequest {
     @Pattern(regexp = "^[A-Za-z0-9]*$", message =" A-Z,a-z , 0-9 만 입력하세요.")
     private final String password;
 
-
+    @Builder
+    public LoginRequest(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }
