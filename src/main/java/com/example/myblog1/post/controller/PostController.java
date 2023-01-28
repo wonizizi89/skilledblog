@@ -21,7 +21,7 @@ public class PostController {
     //포스트 글 생성
     @PostMapping("")
     public PostResponse createPost(@RequestBody PostRequest postRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        PostResponse response = postService.createPost(postRequest, userDetails.getUser().getId());
+        PostResponse response = postService.createPost(postRequest, userDetails.getUser());
         return response;
     }
 
