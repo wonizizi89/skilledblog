@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@NoArgsConstructor(force = true,access = AccessLevel.PROTECTED)
+@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 public class CommentRequest {
     @NotNull
     private final String comment;

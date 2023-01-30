@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,8 @@ public class PostService {
         List<PostResponse> postsResponses = postsListPage.stream().map(PostResponse::new).collect(Collectors.toList());
         return new Result(postsResponses.size(),postsResponses);
     }
+
+
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

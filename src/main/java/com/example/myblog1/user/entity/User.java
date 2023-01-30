@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "users")
 public class User{
 
@@ -63,9 +63,7 @@ public class User{
     }
 
 
-//    public UserRoleEnum getRole() {
-//        return userRole;
-//    }
+
 
 
 }

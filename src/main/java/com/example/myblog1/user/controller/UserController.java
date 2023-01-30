@@ -11,6 +11,7 @@ import com.example.myblog1.user.dto.SignupRequest;
 import com.example.myblog1.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
+//todo @EnableWebMvc 에러 해결 안됨
 public class UserController {
 
 
