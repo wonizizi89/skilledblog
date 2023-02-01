@@ -71,9 +71,9 @@ class PostServiceTest {
 
     }
 
-    @Test //todo 마지막에 꼭 해보기 
+    @Test //todo 마지막에 꼭 해보기
     void getPosts() {
-//        //given
+        //given
 //       Pageable pageable = PageRequest.of(20,10);
 //        when(postRepository.findAll(pageable))
 //                .thenReturn(any(Page.class));
