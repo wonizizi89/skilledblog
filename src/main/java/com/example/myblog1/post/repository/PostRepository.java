@@ -1,19 +1,20 @@
 package com.example.myblog1.post.repository;
 
 import com.example.myblog1.post.entity.Post;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PostRepository extends JpaRepository<Post,Long> {
+public interface PostRepository extends JpaRepository<Post, Long> {
 
-    Optional<Post> findByIdAndUserId(Long id, Long userId);
+  Optional<Post> findByIdAndUserId(Long id, Long userId);
 
-    @Query(
-           value = "SELECT p FROM Post p WHERE p.title LIKE %:title% OR p.content LIKE %:content%"
-    )
-    Page<Post> findAllSearch(String title, String content, Pageable pageChoice);
+  Page<Post> findAllByTitleContainingOrContentContaining(String title, String content,
+      PageRequest of);
+  
+//    @Query(
+//           value = "SELECT p FROM Post p WHERE p.title LIKE %:title% OR p.content LIKE %:content%"
+//    )
+
 }
