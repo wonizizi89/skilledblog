@@ -7,6 +7,7 @@ import com.example.myblog1.post.dto.PostResponse;
 import com.example.myblog1.post.service.PostService;
 import com.example.myblog1.user.dto.ResponseStatusDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,9 +38,12 @@ public class PostController {
   //포스트 조회
 
   @GetMapping("/page")
-  public PostService.Result getPosts(@RequestParam("page") int page,
-      @RequestParam("size") int size) {
-    return postService.getPosts(page, size);
+  public PostService.Result getPosts(
+      @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+      @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+      @RequestParam(value = "direction", required = false, defaultValue = "desc") Direction direction,
+      @RequestParam(value = "properties", required = false, defaultValue = "createdDate") String properties) {
+    return postService.getPosts(page, size, direction, properties);
 
   }
 

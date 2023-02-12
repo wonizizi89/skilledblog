@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,9 +37,9 @@ public class PostService {
 
 
   @Transactional
-  public Result getPosts(int page, int size) {
+  public Result getPosts(int page, int size, Direction direction, String properties) {
     Page<Post> postsListPage = postRepository.findAll(
-        PageRequest.of(page - 1, size, Sort.Direction.DESC, "id"));//페이징 셋팅
+        PageRequest.of(page - 1, size, direction, properties));//페이징 셋팅
     if (postsListPage.isEmpty()) {
       throw new CustomException(ExceptionStatus.POST_IS_EMPTY);
     }
