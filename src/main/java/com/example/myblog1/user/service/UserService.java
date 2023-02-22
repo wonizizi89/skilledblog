@@ -61,7 +61,7 @@ public class UserService {
       if (!signupRequest.getAdminToken().equals(ADMIN_TOKEN)) {
         throw new CustomException(ExceptionStatus.ADMIN_PASSWORDS_DO_NOT_MATCH);
       }
-      role = UserRoleEnum.ADMIN;
+      role = UserRoleEnum.ADMIN;//
     }
 
     User user = new User(username, password, email, role);
