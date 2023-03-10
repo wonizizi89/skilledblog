@@ -17,6 +17,7 @@ import java.util.Base64;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +28,7 @@ import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
-
+@RequiredArgsConstructor
 public class JwtUtil {
 
   public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -43,10 +44,6 @@ public class JwtUtil {
   private String secretKey;
   private Key key;
   private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-
-  public JwtUtil(UserDetailsServiceImpl userDetailService) {
-    this.userDetailService = userDetailService;
-  }
 
 
   @PostConstruct
