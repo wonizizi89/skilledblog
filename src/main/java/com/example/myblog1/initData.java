@@ -26,7 +26,7 @@ public class initData implements ApplicationRunner {
         userRepository.save(user1);
         userRepository.save(user2);
         userRepository.save(user3);
-
+//
 
     }
 }
