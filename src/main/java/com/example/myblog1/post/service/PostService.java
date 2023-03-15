@@ -78,7 +78,7 @@ public class PostService {
     Post post = postRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
         () -> new CustomException(ExceptionStatus.POST_IS_EMPTY)
     );
-    post.updatePosts(postRequest);
+    post.updatePosts(postRequest);//
     postRepository.saveAndFlush(post);
 
     return new PostResponse(post);
