@@ -81,7 +81,7 @@ public class PostService {
     post.updatePosts(postRequest);
     postRepository.saveAndFlush(post);
 
-    return new PostResponse(post);
+    return new PostResponse(post);//
 
   }
 
